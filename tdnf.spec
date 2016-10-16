@@ -14,7 +14,7 @@ Requires:   hawkey, librepo, rpm
 BuildRequires:  popt-devel
 BuildRequires:  rpm-devel
 BuildRequires:  glib-devel
-BuildRequires:  hawkey-devel
+BuildRequires:  hawkey-devel >= 0.5.3
 BuildRequires:  openssl-devel
 BuildRequires:  autoconf
 BuildRequires:  automake
