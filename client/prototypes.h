@@ -429,6 +429,7 @@ uint32_t
 TDNFLoadReposFromFile(
     PTDNF pTdnf,
     char* pszRepoFile,
+    TDNF_REPOLISTFILTER nFilter,
     PTDNF_REPO_DATA* ppRepos
     );
 

@@ -61,20 +61,11 @@ TDNFLoadRepoData(
         }
         pszRepoFilePath = g_build_filename(pConf->pszRepoDir, pszFile, NULL);
 
-        dwError = TDNFLoadReposFromFile(pTdnf, pszRepoFilePath, &pRepos);
+        dwError = TDNFLoadReposFromFile(pTdnf, pszRepoFilePath, nFilter, &pRepos);
         BAIL_ON_TDNF_ERROR(dwError);
 
         g_free(pszRepoFilePath);
         pszRepoFilePath = NULL;
-
-        //Apply filter
-        if((nFilter == REPOLISTFILTER_ENABLED && !pRepos->nEnabled) ||
-           (nFilter == REPOLISTFILTER_DISABLED && pRepos->nEnabled))
-        {
-            TDNFFreeRepos(pRepos);
-            pRepos = NULL;
-            continue;
-        }
 
         if(!pReposAll)
         {
@@ -120,6 +111,7 @@ uint32_t
 TDNFLoadReposFromFile(
     PTDNF pTdnf,
     char* pszRepoFile,
+    TDNF_REPOLISTFILTER nFilter,
     PTDNF_REPO_DATA* ppRepos
     )
 {
@@ -174,6 +166,16 @@ TDNFLoadReposFromFile(
                       0,
                       &pRepo->nEnabled);
         BAIL_ON_TDNF_ERROR(dwError);
+
+        //Apply filter
+        if((nFilter == REPOLISTFILTER_ENABLED && !pRepo->nEnabled) ||
+           (nFilter == REPOLISTFILTER_DISABLED && pRepo->nEnabled))
+        {
+            TDNFFreeRepos(pRepo);
+            pRepo = NULL;
+            i++;
+            continue;
+        }
 
         dwError = TDNFRepoGetKeyValue(
                       pKeyFile,
