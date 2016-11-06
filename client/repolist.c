@@ -241,6 +241,33 @@ TDNFLoadReposFromFile(
                       &pRepo->pszPass);
         BAIL_ON_TDNF_ERROR(dwError);
 
+        if(pRepo->nEnabled)
+        {
+            if(pRepo->pszBaseUrl)
+            {
+                dwError = TDNFConfigReplaceVars(pTdnf, &pRepo->pszBaseUrl);
+                BAIL_ON_TDNF_ERROR(dwError);
+            }
+
+            if(pRepo->pszMetaLink)
+            {
+                dwError = TDNFConfigReplaceVars(pTdnf, &pRepo->pszMetaLink);
+                BAIL_ON_TDNF_ERROR(dwError);
+            }
+
+            if(pRepo->pszName)
+            {
+                dwError = TDNFConfigReplaceVars(pTdnf, &pRepo->pszName);
+                BAIL_ON_TDNF_ERROR(dwError);
+            }
+
+            if(pRepo->pszUrlGPGKey)
+            {
+                dwError = TDNFConfigReplaceVars(pTdnf, &pRepo->pszUrlGPGKey);
+                BAIL_ON_TDNF_ERROR(dwError);
+            }
+        }
+
         dwError = TDNFRepoGetKeyValue(
                       pKeyFile,
                       pszRepo,
