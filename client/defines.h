@@ -122,6 +122,7 @@ typedef enum
 #define TDNF_REPO_KEY_BASEURL             "baseurl"
 #define TDNF_REPO_KEY_ENABLED             "enabled"
 #define TDNF_REPO_KEY_METALINK            "metalink"
+#define TDNF_REPO_KEY_MIRRORLIST          "mirrorlist"
 #define TDNF_REPO_KEY_NAME                "name"
 #define TDNF_REPO_KEY_SKIP                "skip_if_unavailable"
 #define TDNF_REPO_KEY_GPGCHECK            "gpgcheck"

@@ -203,11 +203,18 @@ error:
     //remove any cache data that could be potentially corrupt.
     if(pRepoData)
     {
+        const char* url;
+        if (pRepoData->pszBaseUrl)
+            url = pRepoData->pszBaseUrl;
+        else if (pRepoData->pszMirrorList)
+            url = pRepoData->pszMirrorList;
+        else
+            url = pRepoData->pszMetaLink;
         fprintf(
             stderr,
             "Error: Failed to synchronize cache for repo '%s' from '%s'\n",
             pRepoData->pszName,
-            pRepoData->pszBaseUrl);
+            url);
 
         if(pTdnf)
         {

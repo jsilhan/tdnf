@@ -171,7 +171,7 @@ TDNFLoadReposFromFile(
         if((nFilter == REPOLISTFILTER_ENABLED && !pRepo->nEnabled) ||
            (nFilter == REPOLISTFILTER_DISABLED && pRepo->nEnabled))
         {
-            TDNFFreeRepos(pRepo);
+            TDNF_SAFE_FREE_MEMORY(pRepo);
             pRepo = NULL;
             i++;
             continue;
@@ -199,6 +199,14 @@ TDNFLoadReposFromFile(
                       TDNF_REPO_KEY_METALINK,
                       NULL,
                       &pRepo->pszMetaLink);
+        BAIL_ON_TDNF_ERROR(dwError);
+
+        dwError = TDNFRepoGetKeyValue(
+                      pKeyFile,
+                      pszRepo,
+                      TDNF_REPO_KEY_MIRRORLIST,
+                      NULL,
+                      &pRepo->pszMirrorList);
         BAIL_ON_TDNF_ERROR(dwError);
 
         dwError = TDNFRepoGetKeyValueBoolean(
@@ -252,6 +260,12 @@ TDNFLoadReposFromFile(
             if(pRepo->pszMetaLink)
             {
                 dwError = TDNFConfigReplaceVars(pTdnf, &pRepo->pszMetaLink);
+                BAIL_ON_TDNF_ERROR(dwError);
+            }
+
+            if(pRepo->pszMirrorList)
+            {
+                dwError = TDNFConfigReplaceVars(pTdnf, &pRepo->pszMirrorList);
                 BAIL_ON_TDNF_ERROR(dwError);
             }
 
@@ -507,6 +521,7 @@ TDNFFreeRepos(
     TDNF_SAFE_FREE_MEMORY(pRepo->pszName);
     TDNF_SAFE_FREE_MEMORY(pRepo->pszBaseUrl);
     TDNF_SAFE_FREE_MEMORY(pRepo->pszMetaLink);
+    TDNF_SAFE_FREE_MEMORY(pRepo->pszMirrorList);
     TDNF_SAFE_FREE_MEMORY(pRepo->pszUrlGPGKey);
     TDNF_SAFE_FREE_MEMORY(pRepo->pszUser);
     TDNF_SAFE_FREE_MEMORY(pRepo->pszPass);
