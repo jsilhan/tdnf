@@ -76,7 +76,6 @@ TDNFInitRepo(
         BAIL_ON_TDNF_ERROR(dwError);
     }
 
-    ppszRepoUrls[0] = pRepoData->pszBaseUrl;
     ppszLocalUrls[0] = pszRepoCacheDir;
 
     hLibRepo = lr_handle_init();
@@ -112,7 +111,16 @@ TDNFInitRepo(
              }
         }
 
-        lr_handle_setopt(hLibRepo, NULL, LRO_URLS, ppszRepoUrls);
+        if (pRepoData->pszMirrorList)
+            lr_handle_setopt(hLibRepo, NULL, LRO_MIRRORLIST, pRepoData->pszMirrorList);
+        if (pRepoData->pszMetaLink)
+            lr_handle_setopt(hLibRepo, NULL, LRO_METALINKURL, pRepoData->pszMetaLink);
+        if (pRepoData->pszBaseUrl)
+        {
+            ppszRepoUrls[0] = pRepoData->pszBaseUrl;
+            lr_handle_setopt(hLibRepo, NULL, LRO_URLS, ppszRepoUrls);
+        }
+
         lr_handle_setopt(hLibRepo, NULL, LRO_SSLVERIFYPEER, 1);
         lr_handle_setopt(hLibRepo, NULL, LRO_SSLVERIFYHOST, 2);
         lr_handle_setopt(hLibRepo, NULL, LRO_DESTDIR, pszRepoCacheDir);
